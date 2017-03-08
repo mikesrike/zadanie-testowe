@@ -1,0 +1,79 @@
+.column.border-right {
+    border-right: 1px solid #e6e6e6;
+}
+
+.item {
+    color: #3f5654;
+    background: #f9f9f9;
+    border: 1px solid #d8d8d8;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    display: table;
+    padding: 1px 5px;
+    cursor: pointer;
+
+    transition: border 0.2s ease-in-out, background 0.2s ease-in-out;
+}
+
+.item:hover {
+    border: 1px solid #b7b7b7;
+    background: #f3f3f3;
+}
+
+.first-name, .last-name {
+    display: inline-block;
+}
+
+.last-name {
+    margin-left: 3px;
+}
+
+.container.json {
+    background: whitesmoke;
+    padding: 20px;
+    border-radius: 3px;
+}
+
+.container.code {
+    font-family: monospace;
+    color: gray;
+    background: #fbfbfb;
+    border-radius: 3px;
+    padding: 10px;
+    border: 1px solid gainsboro;
+    font-size: 12px;
+}
+
+.container.code pre {
+    font-family: monospace;
+    color: gray;
+    background: #fbfbfb;
+    font-size: 12px;
+}
+
+.notify {
+    line-height: 32px;
+    color: gray;
+    transition: opacity 0.2s ease-in-out;
+    opacity: 0;
+}
+
+.visible {
+    opacity: 1;
+}
+
+.control.has-icon .icon {
+    top: 1.15rem;
+}
+
+.control.search {
+    width: 50%;
+}
+
+.input.is-active, .input.is-focused, .input:active, .input:focus, .textarea.is-active, .textarea.is-focused, .textarea:active, .textarea:focus {
+    border-color: #9c9c9c;
+}
+
+.nodisplay {
+    display: none;
+}
