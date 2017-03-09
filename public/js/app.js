@@ -3,6 +3,83 @@ var enabled = { names: [] };
 var disabled = { names: [] };
 
 /**
+ * Funkcja dodaje element do wybranej tablicy, podświetla go oraz pokazuje
+ * powiadomienie o dodaniu nowego elementu.
+ *
+ * @param {string} firstName Imię
+ * @param {string} lastName  Nazwisko
+ * @param {string} column    Nazwa kolumny do której dodawany jest element.
+ */
+function addName(firstName, lastName, column) {
+    var html = '<div class="item"><div class="first-name">' +
+        firstName + '</div><div class="last-name">' +
+        lastName + '</div></div>';
+
+    if (column == 'enabled') {
+        $('.container.enabled').append(html);
+    } else {
+        $('.container.disabled').append(html);
+    }
+
+    sort();
+
+    $('.item').each(function(index, el) {
+        var name = $(this).text();
+
+        if (name == firstName + lastName) {
+            $(this).addClass('is-new');
+        }
+    });
+
+    notify('Dodano nowy element do kolumny ' + column);
+
+    return;
+}
+
+/**
+ * Funkcja sprawdza czy w formularzu wystąpiły jakieś błędy i ewentualnie
+ * powiadamia użytkownika o wystąpieniu takich.
+ */
+function checkAddErrors(event) {
+    event.preventDefault();
+
+    removeWarnings();
+
+    var requiredTooltip = '<span id="tooltip-required" class="tooltip ' +
+        'is-danger">To pole nie może pozostać puste</span>';
+    var warningTooltip = '<span id="tooltip-required" class="tooltip ' +
+        'is-warning">Proszę wprowadzić poprawne imię i nazwisko</span>';
+    var name = $('#input-name').val();
+    // var column = 'enabled';
+    var column = $('#form-add input[name=table]:checked').val();
+
+    if (name.length < 1) {
+        $('#modal-add .tooltips').append(requiredTooltip);
+        $('#input-name').addClass('is-danger');
+    } else if ((name.split(" ").length - 1) !== 1
+        || name.substr(name.indexOf(" ") + 1).length < 1) {
+        $('#modal-add .tooltips').append(warningTooltip);
+        $('#input-name').addClass('is-warning');
+    } else {
+        addName(name.split(" ")[0], name.split(" ")[1], column);
+        hideModal();
+    }
+
+    return;
+}
+
+/**
+ * Funkcja ukrywa wyskakujące okienko z formularzem oraz czyści jego zawartość.
+ */
+function hideModal() {
+    $('#modal-add .input').val('');
+    removeWarnings();
+    $('#modal-add').removeClass('is-active');
+
+    return;
+}
+
+/**
  * Funkcja dodaje wszystkie imiona i nazwiska do poszczególnych tabeli oraz
  * dodaje do przycisków event umożliwiający kliknięcie
  *
@@ -52,6 +129,47 @@ function load() {
 }
 
 /**
+ * Funkcja wywoływana kliknięciem na imię/nazwisko przerzuca dane imię/nazwisko
+ * do przeciwnej kolumny, a następnie wywoływuje sortowanie elementów.
+ */
+function move() {
+    var currentColumn = $(this).parent('.container').attr('class');
+    var element = $(this).detach();
+
+    if (currentColumn.includes('enabled')) {
+        $('.container.disabled').append(element);
+    } else {
+        $('.container.enabled').append(element);
+    }
+
+    sort();
+
+    return;
+}
+
+/**
+ * Funkcja pokazuje przez 5 sekund powiadomienie w dolnej krawędzi ekranu.
+ *
+ * @param  {string} message Treść wiadomości jaka ma się pokazać
+ */
+function notify(message) {
+    $('.notify').append('<div class="notification is-info">' + message + '</div>');
+
+    setTimeout(function(){
+        $('.notify').empty();
+    }, 5000);
+
+    return;
+}
+
+function removeWarnings() {
+    $('#input-name').removeClass('is-danger is-warning');
+    $('#modal-add .tooltips').empty();
+
+    return;
+}
+
+/**
  * Funkcja zapisuje wszystkie zmiany w kolumnach do obiektów, a następnie
  * wysyła obiekty do API, gdzie są później zapisywane w formie plików .json.
  * Po otrzymaniu odpowiedzi zwrotnej od serwera API funkcja odświeża pogląd
@@ -92,6 +210,37 @@ function save() {
             notify('Pomyślnie zaktualizowano pliki');
         }
     });
+
+    return;
+}
+
+/**
+ * Funkcja wywołana wpisywaniem w polu szukania liter filtruje wyniki
+ * wyszukiwania i ukrywa elementy które nie pasują do szukanej frazy.
+ */
+function search() {
+    var search = $('#search-input').val().toLowerCase();
+
+    $('.container.enabled .item').each(function(index, el) {
+        $(this).removeClass('nodisplay');
+
+        var rawItemValue = $(this).children('.first-name').text() + ' ' +
+            $(this).children('.last-name').text();
+        var itemValue = rawItemValue.toLowerCase();
+
+        if (!itemValue.includes(search)) {
+            $(this).addClass('nodisplay');
+        }
+    });
+
+    return;
+}
+
+/**
+ * Funkcja pokazuje okienko z formularzem dodawania nowego elementu.
+ */
+function showAddModal() {
+    $('#modal-add').addClass('is-active');
 
     return;
 }
@@ -144,68 +293,10 @@ function sort() {
 function updatePreview() {
     $('.container.code').empty();
 
-    $('.enabled-json').append('<pre>' + JSON.stringify(enabled, null, 4) + '</pre>');
-    $('.disabled-json').append('<pre>' + JSON.stringify(disabled, null, 4) + '</pre>');
-
-    return;
-}
-
-/**
- * Funkcja wywoływana kliknięciem na imię/nazwisko przerzuca dane imię/nazwisko
- * do przeciwnej kolumny, a następnie wywoływuje sortowanie elementów.
- */
-function move() {
-    var currentColumn = $(this).parent('.container').attr('class');
-    var element = $(this).detach();
-
-    if (currentColumn.includes('enabled')) {
-        $('.container.disabled').append(element);
-    } else {
-        $('.container.enabled').append(element);
-    }
-
-    sort();
-
-    return;
-}
-
-/**
- * Funkcja pokazuje przez 2 sekundy powiadomienie obok przycisku 'zapisz'.
- *
- * @param  {string} message Treść wiadomości jaka ma się pokazać
- */
-function notify(message) {
-    $('.notify').empty();
-
-    $('.notify').append(message);
-
-    $('.notify').addClass('visible');
-
-    setTimeout(function(){
-        $('.notify').removeClass('visible');
-    }, 2000);
-
-    return;
-}
-
-/**
- * Funkcja wywołana wpisywaniem w polu szukania liter filtruje wyniki
- * wyszukiwania i ukrywa elementy które nie pasują do szukanej frazy.
- */
-function search() {
-    var search = $('#search-input').val().toLowerCase();
-
-    $('.container.enabled .item').each(function(index, el) {
-        $(this).removeClass('nodisplay');
-
-        var rawItemValue = $(this).children('.first-name').text() + ' ' +
-            $(this).children('.last-name').text();
-        var itemValue = rawItemValue.toLowerCase();
-
-        if (!itemValue.includes(search)) {
-            $(this).addClass('nodisplay');
-        }
-    });
+    $('.enabled-json').append('<pre>' + JSON.stringify(enabled, null, 4) +
+        '</pre>');
+    $('.disabled-json').append('<pre>' + JSON.stringify(disabled, null, 4) +
+        '</pre>');
 
     return;
 }
@@ -213,6 +304,10 @@ function search() {
 $(document).ready(function() {
     load();
 
+    $('#add').click(showAddModal);
+    $('#form-add').submit(checkAddErrors);
+    $('#input-name').keyup(removeWarnings);
+    $('#modal-add .modal-background, #modal-add .modal-close').click(hideModal);
     $('#save').click(save);
     $('#search-input').keyup(search);
 });

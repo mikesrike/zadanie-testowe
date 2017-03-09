@@ -21,7 +21,7 @@ class NamesController extends Controller
     }
 
     public function saveEnabled(Request $request) {
-        $json_string = json_encode($request->input());
+        $json_string = json_encode($request->input(), JSON_PRETTY_PRINT);
 
         if (isset($json_string)) {
             Storage::disk('public')->put('enabled.json', $json_string);
@@ -33,7 +33,7 @@ class NamesController extends Controller
     }
 
     public function saveDisabled(Request $request) {
-        $json_string = json_encode($request->input());
+        $json_string = json_encode($request->input(), JSON_PRETTY_PRINT);
 
         if (isset($json_string)) {
             Storage::disk('public')->put('disabled.json', $json_string);

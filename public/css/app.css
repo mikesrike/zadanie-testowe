@@ -1,9 +1,45 @@
+@keyframes fade-in {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes flash {
+    0%, 100% {
+        color: #565656;
+        background: #f9f9f9;
+        border-color: #d8d8d8;
+    }
+
+    50% {
+        color: #324b63;
+        background: #d9ecff;
+        border-color: #b4d9ff;
+    }
+}
+
+@keyframes notify {
+    0%, 100% {
+        opacity: 0;
+        transform: translateX(-200px);
+    }
+
+    10%, 90% {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
 .column.border-right {
     border-right: 1px solid #e6e6e6;
 }
 
 .item {
-    color: #3f5654;
+    color: #565656;
     background: #f9f9f9;
     border: 1px solid #d8d8d8;
     border-radius: 5px;
@@ -13,6 +49,10 @@
     cursor: pointer;
 
     transition: border 0.2s ease-in-out, background 0.2s ease-in-out;
+}
+
+.item.is-new {
+    animation: flash 1s ease-in-out 5;
 }
 
 .item:hover {
@@ -51,11 +91,12 @@
     font-size: 12px;
 }
 
-.notify {
-    line-height: 32px;
-    color: gray;
-    transition: opacity 0.2s ease-in-out;
-    opacity: 0;
+.notify .notification {
+    position: fixed;
+    bottom: 10px;
+    left: 10px;
+    z-index: 10 !important;
+    animation: notify 5s ease-in-out forwards;
 }
 
 .visible {
@@ -76,4 +117,64 @@
 
 .nodisplay {
     display: none;
+}
+
+.wrapper-code {
+    position: relative;
+}
+
+.json-link {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    z-index: 2;
+}
+
+.clearfix {
+    clear: both;
+}
+
+p.control {
+    position: relative;
+}
+
+p.control .tooltip {
+    padding: 5px 10px;
+    position: absolute;
+    top: 25px;
+    left: 40%;
+    border-radius: 3px;
+    z-index: 3;
+    animation: fade-in 0.5s ease-in-out;
+}
+
+p.control .tooltip:after {
+    content: '';
+    position: absolute;
+    bottom: 80%;
+    left: 20%;
+    width: 10px;
+    height: 10px;
+    transform: rotate(45deg);
+    z-index: 1;
+    animation: fade-in 0.5s ease-in-out;
+}
+
+p.control .tooltip.is-warning, p.control .tooltip.is-warning:after {
+    background: #ffdd57;
+}
+
+p.control .tooltip.is-danger, p.control .tooltip.is-danger:after {
+    background: #f14f4f;
+    color: white;
+}
+
+.button.is-focused, .button:focus {
+    border-color: #b1b1b1;
+    box-shadow: 0 0 0.5em rgba(193, 193, 193, 0.25);
+    color: #363636;
+}
+
+#input-name {
+    transition: border-color 0.5s ease-in-out;
 }

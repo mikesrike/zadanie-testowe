@@ -1,6 +1,8 @@
 @extends('templates.main')
 
 @section('content')
+    @include('shared.modal')
+    <div class="notify"></div>
     <div class="section">
         <div class="container">
             <div class="columns">
@@ -14,10 +16,10 @@
                     <a id="save" class="button">
                         Zapisz
                     </a>
-                </div>
 
-                <div class="column notify">
-                    {{-- Miejsce na komunikat wywoływany funkcją js notify() --}}
+                    <a id="add" class="button">
+                        Dodaj element
+                    </a>
                 </div>
             </div>
 
@@ -69,8 +71,14 @@
                             enabled.json
                         </p>
 
-                        <div class="container code enabled-json">
-                            Ładowanie...
+                        <div class="wrapper-code">
+                            <div class="container code enabled-json">
+                                Ładowanie...
+                            </div>
+
+                            <a href="{{ asset('storage/enabled.json') }}" class="button json-link" download>
+                                Pobierz
+                            </a>
                         </div>
                     </div>
 
@@ -79,9 +87,16 @@
                             disabled.json
                         </p>
 
-                        <div class="container code disabled-json">
-                            Ładowanie...
+                        <div class="wrapper-code">
+                            <div class="container code disabled-json">
+                                Ładowanie...
+                            </div>
+
+                            <a href="{{ asset('storage/disabled.json') }}" class="button json-link" download>
+                                Pobierz
+                            </a>
                         </div>
+
                     </div>
                 </div>
             </div>
