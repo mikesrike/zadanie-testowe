@@ -1,8 +1,9 @@
 # Edytor listy JSON
 
-Przed uruchomieniem serwera należy ustawić dowiązanie symboliczne katalogu storage żeby umożliwić aplikacji dostęp i edycję plików .json. Robimy to komendą:
+Przed uruchomieniem serwera należy zainstalować wszystkie zależności oraz ustawić dowiązanie symboliczne katalogu storage żeby umożliwić aplikacji dostęp i edycję plików .json. Robimy to komendami:
 
 ```sh
+$ composer install
 $ php artisan storage:link
 ```
 
