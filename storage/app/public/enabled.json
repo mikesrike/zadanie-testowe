@@ -21,6 +21,14 @@
             "lastName": "Duda"
         },
         {
+            "firstName": "Marek",
+            "lastName": "Kondrat"
+        },
+        {
+            "firstName": "Jan",
+            "lastName": "Kowalski"
+        },
+        {
             "firstName": "J\u00f3zef",
             "lastName": "Kwiatkowski"
         },
@@ -31,6 +39,10 @@
         {
             "firstName": "Agnieszka",
             "lastName": "Nowak"
+        },
+        {
+            "firstName": "Patrycja",
+            "lastName": "Sikora"
         },
         {
             "firstName": "Lech",
