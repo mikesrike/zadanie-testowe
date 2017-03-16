@@ -51,7 +51,7 @@ return [
     |
     */
 
-    'url' => env('APP_URL', 'http://localhost'),
+    'url' => 'https://boiling-everglades-90622.herokuapp.com/',
 
     /*
     |--------------------------------------------------------------------------
